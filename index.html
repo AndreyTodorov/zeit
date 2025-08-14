@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Working Time Converter</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #f0f4f8, #d9e4ec);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .container {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        max-width: 350px;
+        width: 100%;
+        text-align: center;
+    }
+    h1 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        color: #333;
+    }
+    label {
+        display: block;
+        margin: 0.8rem 0 0.3rem;
+        color: #555;
+        text-align: left;
+    }
+    input, select {
+        width: 100%;
+        padding: 0.6rem;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-sizing: border-box;
+    }
+    button {
+        margin-top: 1.5rem;
+        padding: 0.7rem 1.2rem;
+        background: #4a90e2;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        cursor: pointer;
+        width: 100%;
+    }
+    button:hover {
+        background: #357ABD;
+    }
+    #result {
+        margin-top: 1.5rem;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #222;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Working Time Converter</h1>
+
+    <label for="mode">Conversion Mode:</label>
+    <select id="mode" onchange="toggleMode()">
+        <option value="toDays">Hours & Minutes → Working Days</option>
+        <option value="toHours">Working Days → Hours & Minutes</option>
+    </select>
+
+    <div id="hoursMinutesInputs">
+        <label for="hours">Hours:</label>
+        <input type="number" id="hours" placeholder="Enter hours">
+
+        <label for="minutes">Minutes:</label>
+        <input type="number" id="minutes" value="0" placeholder="Enter minutes">
+    </div>
+
+    <div id="daysInput" style="display:none;">
+        <label for="days">Working Days:</label>
+        <input type="number" id="days" step="0.01" placeholder="Enter working days">
+    </div>
+
+    <button onclick="calculate()">Convert</button>
+    <p id="result"></p>
+</div>
+
+<script>
+const workDayMinutes = 7 * 60 + 42; // 7h 42m
+
+function toggleMode() {
+    const mode = document.getElementById('mode').value;
+    document.getElementById('hoursMinutesInputs').style.display = mode === "toDays" ? "block" : "none";
+    document.getElementById('daysInput').style.display = mode === "toHours" ? "block" : "none";
+    document.getElementById('result').textContent = "";
+}
+
+function calculate() {
+    const mode = document.getElementById('mode').value;
+
+    if (mode === "toDays") {
+        const hours = parseInt(document.getElementById('hours').value) || 0;
+        const minutes = parseInt(document.getElementById('minutes').value) || 0;
+        const totalMinutes = hours * 60 + minutes;
+        const days = Math.floor(totalMinutes / workDayMinutes);
+        const remainingMinutes = totalMinutes % workDayMinutes;
+        const remHours = Math.floor(remainingMinutes / 60);
+        const remMinutes = remainingMinutes % 60;
+
+        document.getElementById('result').textContent =
+            `${hours}h ${minutes}m = ${days} days, ${remHours}h ${remMinutes}m`;
+    } 
+    else if (mode === "toHours") {
+        const days = parseFloat(document.getElementById('days').value) || 0;
+        const totalMinutes = days * workDayMinutes;
+        const totalHours = Math.floor(totalMinutes / 60);
+        const remMinutes = Math.round(totalMinutes % 60);
+
+        document.getElementById('result').textContent =
+            `${days} working days = ${totalHours}h ${remMinutes}m`;
+    }
+}
+</script>
+</body>
+</html>
