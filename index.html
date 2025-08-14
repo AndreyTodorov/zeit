@@ -55,11 +55,75 @@
     button:hover {
         background: #357ABD;
     }
-    #result {
+    .result-container {
+        display: none;
         margin-top: 1.5rem;
+        padding: 1rem;
+        background: #e8f4fd;
+        border: 1px solid #4a90e2;
+        border-radius: 6px;
         font-size: 1.2rem;
         font-weight: bold;
         color: #222;
+        text-align: center;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+    }
+    .result-container:hover {
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .tab-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+    }
+    .tab-button {
+        flex: 1;
+        padding: 0.6rem;
+        background: #e0e0e0;
+        border: none;
+        border-radius: 6px 6px 0 0;
+        cursor: pointer;
+        margin: 0 0.2rem;
+        font-size: 0.9rem;
+    }
+    .tab-button.active {
+        background: #4a90e2;
+        color: white;
+    }
+    .tab-button:hover {
+        background: #c0c0c0;
+    }
+    .tab-button.active:hover {
+        background: #357ABD;
+    }
+    .custom-toggle {
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        background: #f0f0f0;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        width: 100%;
+        text-align: center;
+    }
+    .custom-toggle:hover {
+        background: #e0e0e0;
+    }
+    .custom-section {
+        display: none;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: #f9f9f9;
+        border-radius: 6px;
+    }
+    .input-row {
+        display: flex;
+        gap: 1rem;
+    }
+    .input-row > div {
+        flex: 1;
     }
 </style>
 </head>
@@ -67,18 +131,38 @@
 <div class="container">
     <h1>Working Time Converter</h1>
 
-    <label for="mode">Conversion Mode:</label>
-    <select id="mode" onchange="toggleMode()">
-        <option value="toDays">Hours & Minutes → Working Days</option>
-        <option value="toHours">Working Days → Hours & Minutes</option>
-    </select>
+    <button class="custom-toggle" onclick="toggleCustom()">Customize Working Day (Default: 7h 42m)</button>
+    <div id="customSection" class="custom-section">
+        <label>Custom Working Day</label>
+        <div class="input-row">
+            <div>
+                <label for="workHours">Hours:</label>
+                <input type="number" id="workHours" value="7" min="0" placeholder="Hours">
+            </div>
+            <div>
+                <label for="workMinutes">Minutes:</label>
+                <input type="number" id="workMinutes" value="42" min="0" max="59" placeholder="Minutes">
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-buttons">
+        <button class="tab-button active" onclick="switchMode('toDays')">Hours & Minutes → Working Days</button>
+        <button class="tab-button" onclick="switchMode('toHours')">Working Days → Hours & Minutes</button>
+    </div>
 
     <div id="hoursMinutesInputs">
-        <label for="hours">Hours:</label>
-        <input type="number" id="hours" placeholder="Enter hours">
-
-        <label for="minutes">Minutes:</label>
-        <input type="number" id="minutes" value="0" placeholder="Enter minutes">
+        <label>Time to Convert</label>
+        <div class="input-row">
+            <div>
+                <label for="hours">Hours:</label>
+                <input type="number" id="hours" placeholder="Enter hours">
+            </div>
+            <div>
+                <label for="minutes">Minutes:</label>
+                <input type="number" id="minutes" value="0" placeholder="Enter minutes">
+            </div>
+        </div>
     </div>
 
     <div id="daysInput" style="display:none;">
@@ -87,23 +171,69 @@
     </div>
 
     <button onclick="calculate()">Convert</button>
-    <p id="result"></p>
+    <div id="result" class="result-container"></div>
 </div>
 
 <script>
-const workDayMinutes = 7 * 60 + 42; // 7h 42m
+let currentMode = 'toDays';
+const settingsKey = 'workingTimeSettings'; // Key for localStorage, extensible for future settings
 
-function toggleMode() {
-    const mode = document.getElementById('mode').value;
-    document.getElementById('hoursMinutesInputs').style.display = mode === "toDays" ? "block" : "none";
-    document.getElementById('daysInput').style.display = mode === "toHours" ? "block" : "none";
-    document.getElementById('result').textContent = "";
+// Function to load settings from localStorage
+function loadSettings() {
+    const storedSettings = localStorage.getItem(settingsKey);
+    if (storedSettings) {
+        const settings = JSON.parse(storedSettings);
+        document.getElementById('workHours').value = settings.workHours || 7;
+        document.getElementById('workMinutes').value = settings.workMinutes || 42;
+        // In the future, load additional settings here
+    }
+}
+
+// Function to save settings to localStorage
+function saveSettings() {
+    const settings = {
+        workHours: parseInt(document.getElementById('workHours').value) || 7,
+        workMinutes: parseInt(document.getElementById('workMinutes').value) || 42,
+        // In the future, add additional settings here
+    };
+    localStorage.setItem(settingsKey, JSON.stringify(settings));
+}
+
+function toggleCustom() {
+    const section = document.getElementById('customSection');
+    const toggleButton = document.querySelector('.custom-toggle');
+    if (section.style.display === 'none' || section.style.display === '') {
+        section.style.display = 'block';
+        toggleButton.textContent = 'Hide Custom Working Day (Default: 7h 42m)';
+    } else {
+        section.style.display = 'none';
+        toggleButton.textContent = 'Customize Working Day (Default: 7h 42m)';
+    }
+}
+
+function switchMode(mode) {
+    currentMode = mode;
+    document.getElementById('hoursMinutesInputs').style.display = mode === 'toDays' ? 'block' : 'none';
+    document.getElementById('daysInput').style.display = mode === 'toHours' ? 'block' : 'none';
+    const resultElem = document.getElementById('result');
+    resultElem.textContent = '';
+    resultElem.style.display = 'none';
+
+    // Update active tab
+    const buttons = document.querySelectorAll('.tab-button');
+    buttons.forEach(button => {
+        button.classList.toggle('active', button.onclick.toString().includes(mode));
+    });
 }
 
 function calculate() {
-    const mode = document.getElementById('mode').value;
+    // Get custom working day or default
+    const workHours = parseInt(document.getElementById('workHours').value) || 7;
+    const workMinutes = parseInt(document.getElementById('workMinutes').value) || 42;
+    const workDayMinutes = workHours * 60 + workMinutes;
 
-    if (mode === "toDays") {
+    let resultText = '';
+    if (currentMode === 'toDays') {
         const hours = parseInt(document.getElementById('hours').value) || 0;
         const minutes = parseInt(document.getElementById('minutes').value) || 0;
         const totalMinutes = hours * 60 + minutes;
@@ -112,19 +242,59 @@ function calculate() {
         const remHours = Math.floor(remainingMinutes / 60);
         const remMinutes = remainingMinutes % 60;
 
-        document.getElementById('result').textContent =
-            `${hours}h ${minutes}m = ${days} days, ${remHours}h ${remMinutes}m`;
-    } 
-    else if (mode === "toHours") {
+        resultText = `${hours}h ${minutes}m = ${days} days, ${remHours}h ${remMinutes}m`;
+    } else if (currentMode === 'toHours') {
         const days = parseFloat(document.getElementById('days').value) || 0;
         const totalMinutes = days * workDayMinutes;
         const totalHours = Math.floor(totalMinutes / 60);
         const remMinutes = Math.round(totalMinutes % 60);
 
-        document.getElementById('result').textContent =
-            `${days} working days = ${totalHours}h ${remMinutes}m`;
+        resultText = `${days} working days = ${totalHours}h ${remMinutes}m`;
+    }
+
+    // Display result with a subtle animation
+    const resultElem = document.getElementById('result');
+    resultElem.textContent = resultText;
+    resultElem.style.display = 'block';
+    resultElem.style.opacity = 0;
+    setTimeout(() => {
+        resultElem.style.opacity = 1;
+    }, 100);
+
+    // Save settings after calculation (in case they were changed)
+    saveSettings();
+}
+
+// Function to handle Enter key press
+function handleEnterKey(event) {
+    if (event.key === 'Enter' || event.keyCode === 13) {
+        if (currentMode === 'toDays') {
+            const hoursInput = document.getElementById('hours');
+            if (hoursInput.value.trim() !== '') {
+                calculate();
+            }
+        } else if (currentMode === 'toHours') {
+            const daysInput = document.getElementById('days');
+            if (daysInput.value.trim() !== '') {
+                calculate();
+            }
+        }
     }
 }
+
+// Initialize: Load settings and set up event listeners
+loadSettings();
+switchMode('toDays');
+
+// Add event listeners to save settings on input change
+document.getElementById('workHours').addEventListener('input', saveSettings);
+document.getElementById('workMinutes').addEventListener('input', saveSettings);
+// In the future, add listeners for additional settings here
+
+// Add keydown listeners to relevant inputs for Enter key submission
+document.getElementById('hours').addEventListener('keydown', handleEnterKey);
+document.getElementById('minutes').addEventListener('keydown', handleEnterKey);
+document.getElementById('days').addEventListener('keydown', handleEnterKey);
 </script>
 </body>
 </html>
