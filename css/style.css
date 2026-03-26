@@ -105,6 +105,34 @@ button:active {
     transform: translate(-2px, -2px);
     box-shadow: 10px 10px 0px #000000;
 }
+.compensation-container {
+    display: none;
+    margin-top: 1rem;
+    padding: 1.5rem;
+    background: #98FF98;
+    border: 4px solid #000000;
+    border-radius: 0;
+    font-weight: 900;
+    color: #000000;
+    text-align: center;
+    box-shadow: 8px 8px 0px #000000;
+    transition: all 0.2s ease;
+}
+.compensation-container:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 10px 10px 0px #000000;
+}
+.compensation-label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+    opacity: 0.8;
+}
+.compensation-value {
+    font-size: 1.6rem;
+    letter-spacing: -0.5px;
+}
 .tab-buttons {
     display: flex;
     justify-content: space-between;
@@ -251,6 +279,20 @@ button:active {
         box-shadow: 8px 8px 0px #000000;
     }
 
+    .compensation-container {
+        padding: 1.2rem;
+        border-width: 3px;
+        box-shadow: 6px 6px 0px #000000;
+    }
+
+    .compensation-container:hover {
+        box-shadow: 8px 8px 0px #000000;
+    }
+
+    .compensation-value {
+        font-size: 1.3rem;
+    }
+
     .tab-buttons {
         gap: 0.5rem;
         margin-bottom: 1.2rem;
@@ -325,5 +367,13 @@ button:active {
     .result-container {
         font-size: 1rem;
         padding: 1rem;
+    }
+
+    .compensation-container {
+        padding: 1rem;
+    }
+
+    .compensation-value {
+        font-size: 1.1rem;
     }
 }
