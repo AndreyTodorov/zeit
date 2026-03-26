@@ -45,13 +45,14 @@ function showCompensation(exactDays) {
         return;
     }
 
-    const dailyRate = salary / 22;
+    const dailyRate = salary / 22; // 22 working days per month (fixed)
     const compensation = dailyRate * exactDays;
 
     labelElem.textContent = `Compensation (€${dailyRate.toFixed(2)} / day)`;
     valueElem.textContent = `€${compensation.toFixed(2)}`;
-    compensationElem.style.display = 'block';
+    compensationElem.style.display = 'none';
     compensationElem.style.opacity = 0;
+    compensationElem.style.display = 'block';
     setTimeout(() => { compensationElem.style.opacity = 1; }, 100);
 }
 
