@@ -1,4 +1,5 @@
 let currentMode = 'toDays';
+let settingsOpen = false;
 const settingsKey = 'workingTimeSettings'; // Key for localStorage, extensible for future settings
 
 // Function to load settings from localStorage
@@ -8,7 +9,7 @@ function loadSettings() {
         const settings = JSON.parse(storedSettings);
         document.getElementById('workHours').value = settings.workHours || 7;
         document.getElementById('workMinutes').value = settings.workMinutes || 42;
-        // In the future, load additional settings here
+        document.getElementById('nettSalary').value = settings.nettSalary !== undefined ? settings.nettSalary : 2000;
     }
 }
 
@@ -17,20 +18,45 @@ function saveSettings() {
     const settings = {
         workHours: parseInt(document.getElementById('workHours').value) || 7,
         workMinutes: parseInt(document.getElementById('workMinutes').value) || 42,
-        // In the future, add additional settings here
+        nettSalary: parseFloat(document.getElementById('nettSalary').value) || 0,
     };
     localStorage.setItem(settingsKey, JSON.stringify(settings));
 }
 
-function toggleCustom() {
-    const section = document.getElementById('customSection');
-    const toggleButton = document.querySelector('.custom-toggle');
-    if (section.style.display === 'none' || section.style.display === '') {
-        section.style.display = 'block';
-        toggleButton.textContent = 'Hide Custom Working Day (Default: 7h 42m)';
-    } else {
-        section.style.display = 'none';
-        toggleButton.textContent = 'Customize Working Day (Default: 7h 42m)';
+function toggleSettings() {
+    const settingsView = document.getElementById('settingsView');
+    const converterView = document.getElementById('converterView');
+    const settingsButton = document.getElementById('settingsButton');
+    settingsOpen = !settingsOpen;
+    settingsView.style.display = settingsOpen ? 'block' : 'none';
+    converterView.style.display = settingsOpen ? 'none' : 'block';
+    settingsButton.classList.toggle('active', settingsOpen);
+    settingsButton.textContent = settingsOpen ? 'Close Settings' : '⚙ Settings';
+    if (!settingsOpen) {
+        document.getElementById('compensation').style.display = 'none';
+    }
+}
+
+function showCompensation(exactDays) {
+    const salary = parseFloat(document.getElementById('nettSalary').value) || 0;
+    const compensationElem = document.getElementById('compensation');
+    const labelElem = document.getElementById('compensationLabel');
+    const valueElem = document.getElementById('compensationValue');
+
+    if (salary <= 0) {
+        compensationElem.style.display = 'none';
+        return;
+    }
+
+    const dailyRate = salary / 22; // 22 working days per month (fixed)
+    const compensation = dailyRate * exactDays;
+
+    labelElem.textContent = `Compensation (€${dailyRate.toFixed(2)} / day)`;
+    valueElem.textContent = `€${compensation.toFixed(2)}`;
+    if (compensationElem.style.display !== 'block') {
+        compensationElem.style.opacity = 0;
+        compensationElem.style.display = 'block';
+        setTimeout(() => { compensationElem.style.opacity = 1; }, 100);
     }
 }
 
@@ -41,6 +67,7 @@ function switchMode(mode) {
     const resultElem = document.getElementById('result');
     resultElem.textContent = '';
     resultElem.style.display = 'none';
+    document.getElementById('compensation').style.display = 'none';
 
     // Update active tab
     const buttons = document.querySelectorAll('.tab-button');
@@ -56,6 +83,7 @@ function calculate() {
     const workDayMinutes = workHours * 60 + workMinutes;
 
     let resultText = '';
+    let exactDays = 0;
     if (currentMode === 'toDays') {
         const hours = parseInt(document.getElementById('hours').value) || 0;
         const minutes = parseInt(document.getElementById('minutes').value) || 0;
@@ -64,6 +92,7 @@ function calculate() {
         const remainingMinutes = totalMinutes % workDayMinutes;
         const remHours = Math.floor(remainingMinutes / 60);
         const remMinutes = remainingMinutes % 60;
+        exactDays = days + remainingMinutes / workDayMinutes;
 
         resultText = `${hours}h ${minutes}m = ${days} days, ${remHours}h ${remMinutes}m`;
     } else if (currentMode === 'toHours') {
@@ -71,6 +100,7 @@ function calculate() {
         const totalMinutes = days * workDayMinutes;
         const totalHours = Math.floor(totalMinutes / 60);
         const remMinutes = Math.round(totalMinutes % 60);
+        exactDays = days;
 
         resultText = `${days} working days = ${totalHours}h ${remMinutes}m`;
     }
@@ -83,6 +113,8 @@ function calculate() {
     setTimeout(() => {
         resultElem.style.opacity = 1;
     }, 100);
+
+    showCompensation(exactDays);
 
     // Save settings after calculation (in case they were changed)
     saveSettings();
@@ -112,7 +144,7 @@ switchMode('toDays');
 // Add event listeners to save settings on input change
 document.getElementById('workHours').addEventListener('input', saveSettings);
 document.getElementById('workMinutes').addEventListener('input', saveSettings);
-// In the future, add listeners for additional settings here
+document.getElementById('nettSalary').addEventListener('input', saveSettings);
 
 // Add keydown listeners to relevant inputs for Enter key submission
 document.getElementById('hours').addEventListener('keydown', handleEnterKey);

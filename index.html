@@ -14,79 +14,82 @@
   </head>
   <body>
     <div class="container">
-      <h1>Working Time Converter</h1>
+      <div class="app-header">
+        <h1>Working Time Converter</h1>
+        <button class="settings-button" id="settingsButton" onclick="toggleSettings()">⚙ Settings</button>
+      </div>
 
-      <button class="custom-toggle" onclick="toggleCustom()">
-        Customize Working Day (Default: 7h 42m)
-      </button>
-      <div id="customSection" class="custom-section">
-        <label>Custom Working Day</label>
-        <div class="input-row">
-          <div>
-            <label for="workHours">Hours:</label>
-            <input
-              type="number"
-              id="workHours"
-              value="7"
-              min="0"
-              placeholder="Hours"
-            />
+      <div id="settingsView" style="display: none;">
+        <div class="settings-section">
+          <h2 class="settings-section-title">Custom Working Day</h2>
+          <div class="input-row">
+            <div>
+              <label for="workHours">Hours:</label>
+              <input type="number" id="workHours" value="7" min="0" />
+            </div>
+            <div>
+              <label for="workMinutes">Minutes:</label>
+              <input type="number" id="workMinutes" value="42" min="0" max="59" />
+            </div>
           </div>
+        </div>
+        <div class="settings-section">
+          <h2 class="settings-section-title">Nett Salary</h2>
           <div>
-            <label for="workMinutes">Minutes:</label>
-            <input
-              type="number"
-              id="workMinutes"
-              value="42"
-              min="0"
-              max="59"
-              placeholder="Minutes"
-            />
+            <label for="nettSalary">Nett Salary (€):</label>
+            <input type="number" id="nettSalary" value="2000" min="0" />
           </div>
         </div>
       </div>
 
-      <div class="tab-buttons">
-        <button class="tab-button active" onclick="switchMode('toDays')">
-          Hours & Minutes → Working Days
-        </button>
-        <button class="tab-button" onclick="switchMode('toHours')">
-          Working Days → Hours & Minutes
-        </button>
-      </div>
+      <div id="converterView">
+        <div class="tab-buttons">
+          <button class="tab-button active" onclick="switchMode('toDays')">
+            Hours & Minutes → Working Days
+          </button>
+          <button class="tab-button" onclick="switchMode('toHours')">
+            Working Days → Hours & Minutes
+          </button>
+        </div>
 
-      <div id="hoursMinutesInputs">
-        <label>Time to Convert</label>
-        <div class="input-row">
-          <div>
-            <label for="hours">Hours:</label>
-            <input type="number" id="hours" placeholder="Enter hours" />
-          </div>
-          <div>
-            <label for="minutes">Minutes:</label>
-            <input
-              type="number"
-              id="minutes"
-              value="0"
-              placeholder="Enter minutes"
-            />
+        <div id="hoursMinutesInputs">
+          <label>Time to Convert</label>
+          <div class="input-row">
+            <div>
+              <label for="hours">Hours:</label>
+              <input type="number" id="hours" placeholder="Enter hours" />
+            </div>
+            <div>
+              <label for="minutes">Minutes:</label>
+              <input
+                type="number"
+                id="minutes"
+                value="0"
+                placeholder="Enter minutes"
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div id="daysInput" style="display: none">
-        <label for="days">Working Days:</label>
-        <input
-          type="number"
-          id="days"
-          step="0.01"
-          placeholder="Enter working days"
-        />
-      </div>
+        <div id="daysInput" style="display: none;">
+          <label for="days">Working Days:</label>
+          <input
+            type="number"
+            id="days"
+            step="0.01"
+            placeholder="Enter working days"
+          />
+        </div>
 
-      <button onclick="calculate()">Convert</button>
-      <div id="result" class="result-container"></div>
-    </div>
+        <button onclick="calculate()">Convert</button>
+        <div id="result" class="result-container"></div>
+        <div id="compensation" class="compensation-container">
+          <div id="compensationLabel" class="compensation-label"></div>
+          <div id="compensationValue" class="compensation-value"></div>
+        </div>
+      </div> <!-- end #converterView -->
+
+    </div> <!-- end .container -->
 
     <script src="js/script.js"></script>
   </body>
