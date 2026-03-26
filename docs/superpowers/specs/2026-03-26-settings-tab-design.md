@@ -23,7 +23,14 @@ The container header shows the title and settings button on the same row:
 [ Working Time Converter ]          [ ⚙ Settings ]
 ```
 
-The `⚙ Settings` button uses the existing neobrutalism button style (green `#98FF98` background when inactive, purple `#9945FF` with white text when active — matching the active tab style).
+The `⚙ Settings` button uses the existing neobrutalism button style:
+
+| State | Background | Text color | Shadow |
+|-------|-----------|------------|--------|
+| Inactive | `#00D9FF` cyan | `#000000` black | `4px 4px 0 #000` |
+| Active | `#9945FF` purple | `#FFE500` yellow | `4px 4px 0 #000` |
+
+The `h1` title must explicitly set `color: #000000` so it renders as black on the white container background.
 
 ### App States
 
