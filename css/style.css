@@ -156,21 +156,10 @@ button:active {
     margin-top: 0;
     padding: 0.6rem 1rem;
     background: #00D9FF;
-    color: #000000;
-    border: 4px solid #000000;
-    border-radius: 0;
     font-size: 0.85rem;
-    font-weight: 900;
-    cursor: pointer;
     width: auto;
-    text-transform: uppercase;
-    letter-spacing: 1px;
     box-shadow: 4px 4px 0px #000000;
-    transition: all 0.1s ease;
     white-space: nowrap;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-    min-height: 44px;
 }
 .settings-button:hover {
     transform: translate(-2px, -2px);
@@ -289,6 +278,14 @@ button:active {
         font-size: 0.75rem;
         border-width: 3px;
         box-shadow: 3px 3px 0px #000000;
+    }
+
+    .settings-button:hover {
+        box-shadow: 4px 4px 0px #000000;
+    }
+
+    .settings-button.active {
+        box-shadow: 4px 4px 0px #000000;
     }
 
     .settings-section {
