@@ -33,6 +33,13 @@
             </div>
           </div>
         </div>
+        <div class="settings-section">
+          <h2 class="settings-section-title">Nett Salary</h2>
+          <div>
+            <label for="nettSalary">Nett Salary (€):</label>
+            <input type="number" id="nettSalary" value="2000" min="0" />
+          </div>
+        </div>
       </div>
 
       <div id="converterView">
@@ -76,6 +83,10 @@
 
         <button onclick="calculate()">Convert</button>
         <div id="result" class="result-container"></div>
+        <div id="compensation" class="compensation-container">
+          <div id="compensationLabel" class="compensation-label"></div>
+          <div id="compensationValue" class="compensation-value"></div>
+        </div>
       </div> <!-- end #converterView -->
 
     </div> <!-- end .container -->
