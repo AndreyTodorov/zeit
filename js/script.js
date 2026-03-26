@@ -22,15 +22,20 @@ function saveSettings() {
     localStorage.setItem(settingsKey, JSON.stringify(settings));
 }
 
-function toggleCustom() {
-    const section = document.getElementById('customSection');
-    const toggleButton = document.querySelector('.custom-toggle');
-    if (section.style.display === 'none' || section.style.display === '') {
-        section.style.display = 'block';
-        toggleButton.textContent = 'Hide Custom Working Day (Default: 7h 42m)';
+function toggleSettings() {
+    const settingsView = document.getElementById('settingsView');
+    const converterView = document.getElementById('converterView');
+    const settingsButton = document.getElementById('settingsButton');
+    const isSettingsOpen = settingsView.style.display !== 'none';
+
+    if (isSettingsOpen) {
+        settingsView.style.display = 'none';
+        converterView.style.display = 'block';
+        settingsButton.classList.remove('active');
     } else {
-        section.style.display = 'none';
-        toggleButton.textContent = 'Customize Working Day (Default: 7h 42m)';
+        settingsView.style.display = 'block';
+        converterView.style.display = 'none';
+        settingsButton.classList.add('active');
     }
 }
 
