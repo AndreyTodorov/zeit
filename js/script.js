@@ -32,6 +32,9 @@ function toggleSettings() {
     converterView.style.display = settingsOpen ? 'none' : 'block';
     settingsButton.classList.toggle('active', settingsOpen);
     settingsButton.textContent = settingsOpen ? 'Close Settings' : '⚙ Settings';
+    if (!settingsOpen) {
+        document.getElementById('compensation').style.display = 'none';
+    }
 }
 
 function showCompensation(exactDays) {
@@ -50,10 +53,11 @@ function showCompensation(exactDays) {
 
     labelElem.textContent = `Compensation (€${dailyRate.toFixed(2)} / day)`;
     valueElem.textContent = `€${compensation.toFixed(2)}`;
-    compensationElem.style.display = 'none';
-    compensationElem.style.opacity = 0;
-    compensationElem.style.display = 'block';
-    setTimeout(() => { compensationElem.style.opacity = 1; }, 100);
+    if (compensationElem.style.display !== 'block') {
+        compensationElem.style.opacity = 0;
+        compensationElem.style.display = 'block';
+        setTimeout(() => { compensationElem.style.opacity = 1; }, 100);
+    }
 }
 
 function switchMode(mode) {
