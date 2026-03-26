@@ -1,4 +1,5 @@
 let currentMode = 'toDays';
+let settingsOpen = false;
 const settingsKey = 'workingTimeSettings'; // Key for localStorage, extensible for future settings
 
 // Function to load settings from localStorage
@@ -26,17 +27,10 @@ function toggleSettings() {
     const settingsView = document.getElementById('settingsView');
     const converterView = document.getElementById('converterView');
     const settingsButton = document.getElementById('settingsButton');
-    const isSettingsOpen = settingsView.style.display !== 'none';
-
-    if (isSettingsOpen) {
-        settingsView.style.display = 'none';
-        converterView.style.display = 'block';
-        settingsButton.classList.remove('active');
-    } else {
-        settingsView.style.display = 'block';
-        converterView.style.display = 'none';
-        settingsButton.classList.add('active');
-    }
+    settingsOpen = !settingsOpen;
+    settingsView.style.display = settingsOpen ? 'block' : 'none';
+    converterView.style.display = settingsOpen ? 'none' : 'block';
+    settingsButton.classList.toggle('active', settingsOpen);
 }
 
 function switchMode(mode) {
