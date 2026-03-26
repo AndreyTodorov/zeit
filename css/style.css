@@ -140,38 +140,68 @@ button:active {
     transform: translate(2px, 2px);
     box-shadow: 2px 2px 0px #000000;
 }
-.custom-toggle {
-    margin-bottom: 1.5rem;
-    padding: 0.8rem;
-    background: #98FF98;
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+}
+.app-header h1 {
+    margin-bottom: 0;
+    text-align: left;
+    font-size: 1.6rem;
+}
+.settings-button {
+    margin-top: 0;
+    padding: 0.6rem 1rem;
+    background: #00D9FF;
+    color: #000000;
     border: 4px solid #000000;
     border-radius: 0;
+    font-size: 0.85rem;
+    font-weight: 900;
     cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 700;
-    width: 100%;
-    text-align: center;
+    width: auto;
     text-transform: uppercase;
-    color: #000000;
-    box-shadow: 5px 5px 0px #000000;
+    letter-spacing: 1px;
+    box-shadow: 4px 4px 0px #000000;
     transition: all 0.1s ease;
+    white-space: nowrap;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 44px;
 }
-.custom-toggle:hover {
+.settings-button:hover {
     transform: translate(-2px, -2px);
-    box-shadow: 7px 7px 0px #000000;
+    box-shadow: 6px 6px 0px #000000;
 }
-.custom-toggle:active {
+.settings-button:active {
     transform: translate(2px, 2px);
-    box-shadow: 3px 3px 0px #000000;
+    box-shadow: 2px 2px 0px #000000;
 }
-.custom-section {
-    display: none;
+.settings-button.active {
+    background: #9945FF;
+    color: #FFE500;
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px #000000;
+}
+.settings-section {
     margin-bottom: 1.5rem;
     padding: 1.5rem;
     background: #FFF4CC;
     border: 4px solid #000000;
     border-radius: 0;
     box-shadow: 6px 6px 0px #000000;
+}
+.settings-section-title {
+    display: block;
+    margin: 0 0 1rem 0;
+    font-size: 1rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #000000;
 }
 .input-row {
     display: flex;
@@ -250,19 +280,18 @@ button:active {
         box-shadow: 4px 4px 0px #000000;
     }
 
-    .custom-toggle {
-        padding: 0.7rem;
-        font-size: 0.8rem;
+    .app-header h1 {
+        font-size: 1.2rem;
+    }
+
+    .settings-button {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.75rem;
         border-width: 3px;
-        box-shadow: 4px 4px 0px #000000;
-        margin-bottom: 1.2rem;
+        box-shadow: 3px 3px 0px #000000;
     }
 
-    .custom-toggle:hover {
-        box-shadow: 5px 5px 0px #000000;
-    }
-
-    .custom-section {
+    .settings-section {
         padding: 1.2rem;
         border-width: 3px;
         box-shadow: 5px 5px 0px #000000;
