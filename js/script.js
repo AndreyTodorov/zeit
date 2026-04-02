@@ -10,6 +10,8 @@ function loadSettings() {
         document.getElementById('workHours').value = settings.workHours || 7;
         document.getElementById('workMinutes').value = settings.workMinutes || 42;
         document.getElementById('nettSalary').value = settings.nettSalary !== undefined ? settings.nettSalary : 2000;
+        document.getElementById('hours').value = settings.lastHours !== undefined ? settings.lastHours : '';
+        document.getElementById('minutes').value = settings.lastMinutes !== undefined ? settings.lastMinutes : 0;
     }
 }
 
@@ -19,6 +21,8 @@ function saveSettings() {
         workHours: parseInt(document.getElementById('workHours').value) || 7,
         workMinutes: parseInt(document.getElementById('workMinutes').value) || 42,
         nettSalary: parseFloat(document.getElementById('nettSalary').value) || 0,
+        lastHours: document.getElementById('hours').value,
+        lastMinutes: document.getElementById('minutes').value === '' ? '' : (parseInt(document.getElementById('minutes').value) || 0),
     };
     localStorage.setItem(settingsKey, JSON.stringify(settings));
 }
@@ -145,6 +149,8 @@ switchMode('toDays');
 document.getElementById('workHours').addEventListener('input', saveSettings);
 document.getElementById('workMinutes').addEventListener('input', saveSettings);
 document.getElementById('nettSalary').addEventListener('input', saveSettings);
+document.getElementById('hours').addEventListener('input', saveSettings);
+document.getElementById('minutes').addEventListener('input', saveSettings);
 
 // Add keydown listeners to relevant inputs for Enter key submission
 document.getElementById('hours').addEventListener('keydown', handleEnterKey);
