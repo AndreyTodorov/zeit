@@ -27,7 +27,7 @@ h1 {
     letter-spacing: -1px;
     line-height: 1.2;
 }
-label {
+label, .group-label {
     display: block;
     margin: 0.8rem 0 0.5rem;
     color: #000000;
@@ -246,7 +246,7 @@ button:active {
         letter-spacing: -0.5px;
     }
 
-    label {
+    label, .group-label {
         font-size: 0.8rem;
         margin: 0.6rem 0 0.4rem;
     }
