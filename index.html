@@ -25,11 +25,11 @@
           <div class="input-row">
             <div>
               <label for="workHours">Hours:</label>
-              <input type="number" id="workHours" value="7" min="0" />
+              <input type="number" id="workHours" value="7" min="0" step="any" />
             </div>
             <div>
               <label for="workMinutes">Minutes:</label>
-              <input type="number" id="workMinutes" value="42" min="0" max="59" />
+              <input type="number" id="workMinutes" value="42" min="0" step="any" />
             </div>
           </div>
         </div>
@@ -44,20 +44,26 @@
 
       <div id="converterView">
         <div class="tab-buttons">
-          <button class="tab-button active" onclick="switchMode('toDays')">
-            Hours & Minutes → Working Days
+          <button class="tab-button active" data-mode="toDays" onclick="switchMode('toDays')">
+            Hours &amp; Minutes → Working Days
           </button>
-          <button class="tab-button" onclick="switchMode('toHours')">
-            Working Days → Hours & Minutes
+          <button class="tab-button" data-mode="toHours" onclick="switchMode('toHours')">
+            Working Days → Hours &amp; Minutes
           </button>
         </div>
 
         <div id="hoursMinutesInputs">
-          <label>Time to Convert</label>
+          <div class="group-label">Time to Convert</div>
           <div class="input-row">
             <div>
               <label for="hours">Hours:</label>
-              <input type="number" id="hours" placeholder="Enter hours" />
+              <input
+                type="number"
+                id="hours"
+                min="0"
+                step="any"
+                placeholder="Enter hours"
+              />
             </div>
             <div>
               <label for="minutes">Minutes:</label>
@@ -65,6 +71,8 @@
                 type="number"
                 id="minutes"
                 value="0"
+                min="0"
+                step="any"
                 placeholder="Enter minutes"
               />
             </div>
@@ -76,14 +84,15 @@
           <input
             type="number"
             id="days"
+            min="0"
             step="0.01"
             placeholder="Enter working days"
           />
         </div>
 
         <button onclick="calculate()">Convert</button>
-        <div id="result" class="result-container"></div>
-        <div id="compensation" class="compensation-container">
+        <div id="result" class="result-container" role="status" aria-live="polite"></div>
+        <div id="compensation" class="compensation-container" role="status" aria-live="polite">
           <div id="compensationLabel" class="compensation-label"></div>
           <div id="compensationValue" class="compensation-value"></div>
         </div>
